@@ -17,6 +17,8 @@ from aiogram.utils import executor
 #from aiogram import State, StatesGroup
 from config import  admin_id
 from config import  API_link_streamko
+from aiogram.types import  ReplyKeyboardMarkup,ReplyKeyboardRemove,KeyboardButton
+#from aiogram.utils.callback_data import CallbackData
 class Form(StatesGroup):
     peremennaya=State()
     peremennaya11=State()
@@ -209,6 +211,16 @@ def orange(a1a,b1b,tes=0) :
                                                 f'\n'
                                                 f'DURATION In minutes : {duration/60} ')
 @dp.message_handler(commands=['inline'])
+#async def handler(call: types.CallbackQuery, callback_data: dict, message: types.Message):
 async def show_items(message: types.Message):
-    await message.answer('It is buttons', reply_markup=kb.start_keyboard)
+#    currency = call    back_data.get('currency')
+#    print(currency)
+#    keyboard1 = get_reply_markup(currency)
+    await message.reply('It is buttons', reply_markup=kb.start_keyboard)
     kb.apelsin()
+
+
+
+@dp.message_handler(commands=['1'])
+async def process_command_1(message: types.Message):
+    await message.reply("Первая инлайн кнопка", reply_markup=kb.inline_kb1)
