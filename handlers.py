@@ -26,6 +26,7 @@ asds1=0
 z=111
 argons='1233213'
 argons1=''
+yes=0
 DateData=[]
 AOP=[]
 DateDataForInform = ['Введите пожалуйста день от которого форм.статистику',
@@ -52,11 +53,13 @@ async  def echo(message:Message):
         await message.reply(text='I`m sorry but you can`t use this commands')
 @dp.message_handler(lambda message: message.text == '/activate' or message.text == '/activate@DIDInform_bot' )
 async def act(message:Message):
+    global yes
     z=0
     for i in admin_id:
         if i == message.from_user.id:
             await message.reply(text='User who need activations please enter +')
             z=1
+            yes=1
     #Вписати запит на заповннення інформації
 #     @dp.message_handler(content_types=["text"])
 # async def do_something(message: Message):
@@ -65,6 +68,7 @@ async def act(message:Message):
         await message.reply(text='I`m sorry but u don`t can activate this bot because you dont have privileges')
 @dp.message_handler(lambda message: message.text == '+')
 async def act(message:Message,z=z):
+    global yes
     print(z)
     z=0
     for i in admin_id:
@@ -73,10 +77,14 @@ async def act(message:Message,z=z):
             await message.reply(text=f'Ammm {message.from_user.first_name} what you doing? Activating denied')
             z=1133
             return z
-    if z==0:
+    if z==0 and yes==1:
         await message.reply(text=f'Hello {message.from_user.first_name} your ID {message.from_user.id} it`s added to my list')
         admin_id.append(message.from_user.id)
         print("AdminID ==>>>"+str(admin_id))
+    elif z==0 and yes!=1:
+        await message.reply(text=f'Ammm {message.from_user.first_name} I`m sorry but if u want have access'
+                                 f' YOu should do request to @Did_global .  Activating denied')
+        yes=0
 #@dp.message_handler(state=Add.test_state)
 @dp.message_handler(lambda message: message.text == '/cdr' )
 async def act(message:types.Message,state: FSMContext):
@@ -223,4 +231,15 @@ async def show_items(message: types.Message):
 
 @dp.message_handler(commands=['1'])
 async def process_command_1(message: types.Message):
-    await message.reply("Первая инлайн кнопка", reply_markup=kb.inline_kb1)
+    access=0
+    for i in admin_id:
+        if message.from_user.id == i:
+            access=1
+    if access==1:
+        await message.reply("Первая инлайн кнопка", reply_markup=kb.inline_kb1)
+    elif access!=1:
+        await bot.send_message(message.chat.id,'I`m sorry but u can`t use this command, please send request to @Pavel_PavelP or @Did_global he can add u to list')
+
+@dp.message_handler(commands=['2'])
+async def process_command_1(message: types.Message):
+    await message.reply("Первая инлайн кнопка", reply_markup=kb.inline_kb2)
